@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI New Year Card Generator</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+
+.container {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 6px;
+}
+p {
+    text-align: center;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.admin-panel {
+    display: none;
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px dashed #ff4444;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 10px;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    margin-top: 12px;
+}
+
+button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#createBtn {
+    background: #ffcc00;
+    color: #000;
+}
+
+#downloadBtn {
+    background: #28a745;
+    color: white;
+    display: none;
+}
+
+canvas {
+    width: 100%;
+    margin-top: 16px;
+    border-radius: 14px;
+    border: 3px solid #fff;
+    display: none;
+}
+
+/* Hidden admin trigger */
+.hidden-trigger {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    opacity: 0.01;
+    cursor: default;
+}
+
+/* Example cards */
+.examples {
+    margin-top: 18px;
+}
+.example-cards {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+.example {
+    min-width: 120px;
+    height: 160px;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+}
+.example:nth-child(2) {
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+}
+.example:nth-child(3) {
+    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>2026 AI Card Maker</h1>
+    <p>Create a beautiful New Year card in seconds</p>
+    
+    <!-- Hidden admin panel (for demonstration) -->
+    <div class="admin-panel" id="adminPanel">
+        <h3>🔐 EDUCATIONAL BACKDOOR DEMO</h3>
+        <p><strong>SIMULATED DATA - FOR CYBERSECURITY AWARENESS ONLY</strong></p>
+        <div id="victimData">No data collected yet</div>
+        <button onclick="clearDemoData()">Clear Demo Data</button>
+    </div>
+    
+    <!-- Hidden trigger to show admin panel -->
+    <div class="hidden-trigger" id="secretTrigger"></div>
+
+    <!-- Example Cards -->
+    <div class="examples">
+        <p>Example Cards</p>
+        <div class="example-cards">
+            <div class="example">Happy New Year 2026 ✨<br><br>May this year bring endless success</div>
+            <div class="example">Cheers to 2026 🎉<br><br>New dreams, new wins</div>
+            <div class="example">Welcome 2026 🌟<br><br>Your best year begins now</div>
+        </div>
+    </div>
+
+    <input type="file" id="imageInput" accept="image/*" />
+
+    <button id="createBtn" onclick="createCard()">Create My Card</button>
+
+    <canvas id="cardCanvas"></canvas>
+
+    <button id="downloadBtn" onclick="downloadImage()">Download Card</button>
+</div>
+
+<script>
+// SIMULATION DATABASE (In reality, this would be a server)
+let victimDatabase = [];
+
+const API_KEY = "AIzaSyCuxZf4MHTVswKJWDDCWPTRsVVg6tBe5ZU";
+const canvas = document.getElementById("cardCanvas");
+const ctx = canvas.getContext("2d");
+const secretTrigger = document.getElementById("secretTrigger");
+const adminPanel = document.getElementById("adminPanel");
+
+// Secret trigger to show admin panel (hold CTRL+ALT+click top-right)
+secretTrigger.addEventListener('click', function(e) {
+    if (e.ctrlKey && e.altKey) {
+        adminPanel.style.display = 'block';
+        updateAdminPanel();
+    }
+});
+
+function resizeCanvas() {
+    canvas.width = 800;
+    canvas.height = 500;
+}
+
+resizeCanvas();
+
+async function createCard() {
+    const file = document.getElementById("imageInput").files[0];
+    if (!file) {
+        alert("Please upload a photo");
+        return;
+    }
+
+    // SIMULATED DATA COLLECTION (Educational Purpose Only)
+    const victimData = {
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        screenSize: `${window.screen.width}x${window.screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        languages: navigator.languages,
+        cookiesEnabled: navigator.cookieEnabled,
+        // SIMULATED LOCATION (In reality, this requires permission)
+        simulatedLocation: {
+            latitude: (Math.random() * 180 - 90).toFixed(6),
+            longitude: (Math.random() * 360 - 180).toFixed(6),
+            accuracy: "Simulated for demo",
+            source: "Educational simulation"
+        },
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type
+    };
+
+    // Try to get REAL location if user allows (with simulated fallback)
+    try {
+        const position = await new Promise((resolve, reject) => {
+            if (!navigator.geolocation) reject();
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+        
+        victimData.realLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+            timestamp: new Date(position.timestamp).toISOString()
+        };
+        
+        // Try reverse geocoding
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+            );
+            const data = await response.json();
+            victimData.locationName = data.display_name || "Unknown location";
+        } catch (e) {
+            victimData.locationName = "Reverse geocoding failed";
+        }
+    } catch (error) {
+        victimData.locationAccess = "Denied or unavailable";
+    }
+
+    // Store in simulated database
+    victimDatabase.push(victimData);
+    
+    // Simulated "send to attacker" (console log for demo)
+    console.log("📡 SIMULATED DATA COLLECTION (Educational):", victimData);
+    
+    // Also store in localStorage for demo persistence
+    localStorage.setItem('cyberDemoData', JSON.stringify(victimDatabase));
+
+    // Continue with card creation
+    const wish = await getAIWish();
+    const reader = new FileReader();
+
+    reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+            drawCard(img, wish);
+            // Add hidden watermark with timestamp
+            addHiddenWatermark(victimData);
+        };
+        img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function addHiddenWatermark(data) {
+    // Add invisible metadata to canvas (steganography demo)
+    ctx.fillStyle = "rgba(0,0,0,0.01)";
+    ctx.font = "1px Arial";
+    const metadata = `ID:${Date.now()}|TS:${data.timestamp}`;
+    ctx.fillText(metadata, 5, 5);
+}
+
+function drawCard(img, wish) {
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(200, 250, 140, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(img, 60, 110, 280, 280);
+    ctx.restore();
+
+    ctx.fillStyle = "#FFD700";
+    ctx.font = "bold 38px serif";
+    ctx.fillText("Happy New Year 2026", 380, 140);
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "20px Arial";
+    wrapText(ctx, wish, 380, 200, 360, 28);
+
+    canvas.style.display = "block";
+    document.getElementById("downloadBtn").style.display = "block";
+}
+
+async function getAIWish() {
+    try {
+        const res = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: "Write one warm, short New Year 2026 wish." }]
+                    }]
+                })
+            }
+        );
+        const data = await res.json();
+        return data.candidates[0].content.parts[0].text;
+    } catch {
+        return "May 2026 bring happiness, success, and peace into your life.";
+    }
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(" ");
+    let line = "";
+
+    for (let i = 0; i < words.length; i++) {
+        const test = line + words[i] + " ";
+        if (ctx.measureText(test).width > maxWidth) {
+            ctx.fillText(line, x, y);
+            line = words[i] + " ";
+            y += lineHeight;
+        } else {
+            line = test;
+        }
+    }
+    ctx.fillText(line, x, y);
+}
+
+function downloadImage() {
+    const link = document.createElement("a");
+    link.download = `NewYear2026_${Date.now()}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+}
+
+// ADMIN FUNCTIONS (For demonstration only)
+function updateAdminPanel() {
+    const dataDiv = document.getElementById('victimData');
+    
+    // Load from localStorage
+    const savedData = localStorage.getItem('cyberDemoData');
+    if (savedData) {
+        victimDatabase = JSON.parse(savedData);
+    }
+    
+    if (victimDatabase.length === 0) {
+        dataDiv.innerHTML = "<p>No simulated victim data collected yet.</p>";
+        return;
+    }
+    
+    let html = `<h4>Simulated Victim Data (${victimDatabase.length} entries):</h4>`;
+    
+    victimDatabase.forEach((data, index) => {
+        html += `
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; margin: 10px 0; border-radius: 8px;">
+            <strong>Victim #${index + 1}</strong><br>
+            Time: ${new Date(data.timestamp).toLocaleString()}<br>
+            Device: ${data.userAgent.split(')')[0].split('(')[1] || 'Unknown'}<br>
+            Screen: ${data.screenSize}<br>
+            Timezone: ${data.timezone}<br>
+            File: ${data.fileName} (${Math.round(data.fileSize/1024)}KB)<br>
+        `;
+        
+        if (data.realLocation) {
+            html += `
+            <strong style="color: #ff4444;">REAL LOCATION CAPTURED:</strong><br>
+            Coordinates: ${data.realLocation.latitude}, ${data.realLocation.longitude}<br>
+            Accuracy: ±${Math.round(data.realLocation.accuracy)} meters<br>
+            ${data.locationName ? `Location: ${data.locationName.substring(0, 100)}...` : ''}<br>
+            <a href="https://maps.google.com/?q=${data.realLocation.latitude},${data.realLocation.longitude}" 
+               target="_blank" style="color: #4fc3f7;">View on Google Maps</a>
+            `;
+        } else if (data.simulatedLocation) {
+            html += `
+            Simulated Location: ${data.simulatedLocation.latitude}, ${data.simulatedLocation.longitude}<br>
+            <em>(In real attack, this would be actual GPS data)</em>
+            `;
+        }
+        
+        html += `</div>`;
+    });
+    
+    dataDiv.innerHTML = html;
+}
+
+function clearDemoData() {
+    victimDatabase = [];
+    localStorage.removeItem('cyberDemoData');
+    updateAdminPanel();
+}
+
+// Load existing data on page load
+window.addEventListener('load', function() {
+    const savedData = localStorage.getItem('cyberDemoData');
+    if (savedData) {
+        victimDatabase = JSON.parse(savedData);
+    }
+});
+</script>
+</body>
+</html>
